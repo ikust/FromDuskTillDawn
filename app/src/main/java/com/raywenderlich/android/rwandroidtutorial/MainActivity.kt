@@ -30,18 +30,32 @@
 
 package com.raywenderlich.android.rwandroidtutorial
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+
+import android.arch.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * Main Screen
  */
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var viewModel: MainViewModel
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    // Your code
+    viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
+    viewModel.load(intent.extras)
+
+    viewModel.sunriseData.observe(this, Observer {
+      tvSunrise.text = it?.result?.sunrise
+      tvSunset.text = it?.result?.sunset
+    })
   }
 }
