@@ -30,20 +30,29 @@
 
 package com.raywenderlich.android.rwandroidtutorial
 
+import android.Manifest
 import android.arch.lifecycle.Observer
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-
 import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
  * Main Screen
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
   private lateinit var viewModel: MainViewModel
+
+  private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -51,11 +60,33 @@ class MainActivity : AppCompatActivity() {
 
     viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-    viewModel.load(intent.extras)
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-    viewModel.sunriseData.observe(this, Observer {
-      tvSunrise.text = it?.result?.sunrise
-      tvSunset.text = it?.result?.sunset
-    })
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
+
+      viewModel.load(intent.extras)
+      viewModel.sunriseData.observe(this, Observer {
+        tvLocation.text = it?.locationName ?: "Couldn't find your location"
+        tvSunrise.text = it?.sunrise
+        tvSunset.text = it?.sunset
+      })
+    } else {
+      // Show rationale and request permission.
+      ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+    }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    if (requestCode == 0) {
+      if (permissions.size == 1 &&
+          permissions[0] == Manifest.permission.ACCESS_COARSE_LOCATION &&
+          grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        viewModel.load(intent.extras)
+      } else {
+        // Permission was denied. Display an error message.
+      }
+
+    }
   }
 }
