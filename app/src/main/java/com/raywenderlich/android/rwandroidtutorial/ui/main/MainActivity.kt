@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
       tvLocation.text = sunTimetable?.locationName ?: getString(R.string.couldnt_find_location)
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
+      tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+      tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
     })
 
     etSearch.setOnEditorActionListener { textView, actionId, _ ->

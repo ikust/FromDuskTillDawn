@@ -34,5 +34,9 @@ import com.google.gson.annotations.SerializedName
 
 data class LocationSunriseSunset(
     @SerializedName("sunrise") val sunrise: String,
-    @SerializedName("sunset") val sunset: String
+    @SerializedName("sunset") val sunset: String,
+    @SerializedName("solar_noon") val solarNoon: String,
+    @SerializedName("day_length") val dayLength: String,
+    @SerializedName("civil_twilight_begin") val civilTwilightBegin: String,
+    @SerializedName("civil_twilight_end") val civilTwilightEnd: String
 )

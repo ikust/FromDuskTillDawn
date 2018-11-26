@@ -57,6 +57,8 @@ class LocationDetailActivity : AppCompatActivity() {
       tvLocation.text = sunTimetable?.locationName
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
+      tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+      tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
     })
 
     viewModel.load(intent.extras)
