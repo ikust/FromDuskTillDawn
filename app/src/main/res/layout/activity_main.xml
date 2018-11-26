@@ -6,12 +6,12 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   android:gravity="center"
-  tools:context=".MainActivity">
+  tools:context=".ui.main.MainActivity">
 
   <EditText
     android:id="@+id/etSearch"
-    android:drawableRight="@drawable/ic_search_black_24dp"
-    android:hint="Type in city name"
+    android:drawableEnd="@drawable/ic_search_black_24dp"
+    android:hint="@string/city_name_hint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:imeOptions="actionSearch"

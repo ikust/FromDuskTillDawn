@@ -1,3 +1,14 @@
 <resources>
   <string name="app_name">From Dusk Till Dawn</string>
+
+  <string name="sunrise_format">Sunrise: %1$s</string>
+  <string name="sunset_format">Sunset: %1$s</string>
+  <string name="no_data">No Data</string>
+
+  <string name="location_permission_denied">Location permission denied</string>
+  <string name="couldnt_find_location">Couldn\'t find your location</string>
+  <string name="cant_find_given_location">Can\'t find given location</string>
+  <string name="ok">OK</string>
+  <string name="city_name_hint">Type in city name</string>
+
 </resources>

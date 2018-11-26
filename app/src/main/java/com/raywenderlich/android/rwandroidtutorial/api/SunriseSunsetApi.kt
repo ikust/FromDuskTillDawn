@@ -1,6 +1,6 @@
 package com.raywenderlich.android.rwandroidtutorial.api
 
-import com.raywenderlich.android.rwandroidtutorial.data.SunriseResponse
+import com.raywenderlich.android.rwandroidtutorial.data.SunriseSunsetResponse
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -9,20 +9,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface SunriseApi {
+interface SunriseSunsetApi {
 
   @GET("json?date=today")
   fun getSunriseAndSunset(
       @Query("lat") latitude: Double,
       @Query("lng") longitude: Double
-  ): Call<SunriseResponse>
+  ): Call<SunriseSunsetResponse>
 
   companion object {
     private const val BASE_URL = "https://api.sunrise-sunset.org/"
 
-    fun create(): SunriseApi = create(HttpUrl.parse(BASE_URL)!!)
+    fun create(): SunriseSunsetApi = create(HttpUrl.parse(BASE_URL)!!)
 
-    fun create(httpUrl: HttpUrl): SunriseApi {
+    private fun create(httpUrl: HttpUrl): SunriseSunsetApi {
       val client = OkHttpClient.Builder()
           .build()
       return Retrofit.Builder()
@@ -30,7 +30,7 @@ interface SunriseApi {
           .client(client)
           .addConverterFactory(GsonConverterFactory.create())
           .build()
-          .create(SunriseApi::class.java);
+          .create(SunriseSunsetApi::class.java)
     }
   }
 }

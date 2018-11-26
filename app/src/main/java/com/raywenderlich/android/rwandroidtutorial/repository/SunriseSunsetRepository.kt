@@ -1,5 +1,6 @@
 package com.raywenderlich.android.rwandroidtutorial.repository
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -8,10 +9,10 @@ import android.location.Geocoder
 import android.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.raywenderlich.android.rwandroidtutorial.api.SunriseApi
+import com.raywenderlich.android.rwandroidtutorial.api.SunriseSunsetApi
 import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.data.SunSchedule
-import com.raywenderlich.android.rwandroidtutorial.data.SunriseResponse
+import com.raywenderlich.android.rwandroidtutorial.data.LocationSunTimetable
+import com.raywenderlich.android.rwandroidtutorial.data.SunriseSunsetResponse
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Call
@@ -23,8 +24,9 @@ class SunriseSunsetRepository(val app: Application) {
 
   private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(app)
 
-  private val sunriseApi: SunriseApi = SunriseApi.create()
+  private val sunriseSunsetApi: SunriseSunsetApi = SunriseSunsetApi.create()
 
+  @SuppressLint("MissingPermission")
   private fun getLastLocation(): LiveData<Location?> {
     val lastLocation = MutableLiveData<Location?>()
 
@@ -56,38 +58,38 @@ class SunriseSunsetRepository(val app: Application) {
     return coordinates
   }
 
-  fun getSunriseSunset(): LiveData<SunSchedule?> {
+  fun getSunriseSunset(): LiveData<LocationSunTimetable?> {
     return Transformations.switchMap(getLastLocation()) { location ->
       getSunriseSunset(location?.latitude, location?.longitude)
     }
   }
 
-  fun getSunriseSunset(latitude: Double?, longitude: Double?): LiveData<SunSchedule?> {
-    val sunSchedule = MutableLiveData<SunSchedule?>()
+  fun getSunriseSunset(latitude: Double?, longitude: Double?): LiveData<LocationSunTimetable?> {
+    val sunSchedule = MutableLiveData<LocationSunTimetable?>()
 
     if(latitude == null || longitude == null) {
       sunSchedule.value = null
       return sunSchedule
     }
 
-    val call = sunriseApi.getSunriseAndSunset(latitude, longitude)
-    call.enqueue(object : Callback<SunriseResponse> {
+    val call = sunriseSunsetApi.getSunriseAndSunset(latitude, longitude)
+    call.enqueue(object : Callback<SunriseSunsetResponse> {
 
-      override fun onResponse(call: Call<SunriseResponse>, response: Response<SunriseResponse>) {
+      override fun onResponse(call: Call<SunriseSunsetResponse>, response: Response<SunriseSunsetResponse>) {
         if (response.isSuccessful) {
           val geocoder = Geocoder(app, Locale.getDefault())
           val addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
           val locationName = if(addresses.size > 0) {
-            addresses?.get(0)?.locality ?: "${latitude}, ${longitude}"
+            addresses?.get(0)?.locality ?: "$latitude, $longitude"
           } else {
-            "${latitude}, ${longitude}"
+            "$latitude, $longitude"
           }
 
-          sunSchedule.value = SunSchedule(
+          sunSchedule.value = LocationSunTimetable(
               locationName,
-              response.body()?.result?.sunrise ?: "No data",
-              response.body()?.result?.sunset ?: "No data"
+              response.body()?.result?.sunrise,
+              response.body()?.result?.sunset
           )
         } else {
           // Show error
@@ -95,7 +97,7 @@ class SunriseSunsetRepository(val app: Application) {
         }
       }
 
-      override fun onFailure(call: Call<SunriseResponse>, t: Throwable) {
+      override fun onFailure(call: Call<SunriseSunsetResponse>, t: Throwable) {
         t.printStackTrace()
         sunSchedule.value = null
       }

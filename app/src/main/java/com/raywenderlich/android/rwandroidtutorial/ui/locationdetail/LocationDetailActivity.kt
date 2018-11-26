@@ -1,9 +1,11 @@
-package com.raywenderlich.android.rwandroidtutorial
+package com.raywenderlich.android.rwandroidtutorial.ui.locationdetail
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.raywenderlich.android.rwandroidtutorial.R
+import com.raywenderlich.android.rwandroidtutorial.formatTimeString
 import kotlinx.android.synthetic.main.activity_location_detail.*
 
 class LocationDetailActivity : AppCompatActivity() {
@@ -18,8 +20,8 @@ class LocationDetailActivity : AppCompatActivity() {
 
     viewModel.locationSunTimetable.observe(this, Observer { sunTimetable ->
       tvLocation.text = sunTimetable?.locationName
-      tvSunrise.text = sunTimetable?.sunrise
-      tvSunset.text = sunTimetable?.sunset
+      tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
+      tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
     })
 
     viewModel.load(intent.extras)

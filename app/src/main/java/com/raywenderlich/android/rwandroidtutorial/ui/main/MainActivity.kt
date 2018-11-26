@@ -28,12 +28,10 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial
+package com.raywenderlich.android.rwandroidtutorial.ui.main
 
 import android.Manifest
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
@@ -45,14 +43,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.repository.SunriseSunsetRepository
+import com.raywenderlich.android.rwandroidtutorial.R
+import com.raywenderlich.android.rwandroidtutorial.formatTimeString
+import com.raywenderlich.android.rwandroidtutorial.ui.locationdetail.LocationDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-/**
- * Main Screen
- */
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
   private lateinit var viewModel: MainViewModel
@@ -64,10 +60,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-    viewModel.currentLocationSunTimetable.observe(this, Observer {
-      tvLocation.text = it?.locationName ?: "Couldn't find your location"
-      tvSunrise.text = it?.sunrise
-      tvSunset.text = it?.sunset
+    viewModel.currentLocationSunTimetable.observe(this, Observer { sunTimetable ->
+      tvLocation.text = sunTimetable?.locationName ?: getString(R.string.couldnt_find_location)
+      tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
+      tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
     })
 
     etSearch.setOnEditorActionListener { textView, actionId, _ ->
@@ -101,7 +97,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
           grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         viewModel.load()
       } else {
-        // Permission was denied. Display an error message.
+        tvLocation.text = getString(R.string.location_permission_denied)
       }
     }
   }
@@ -112,8 +108,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         startActivity(LocationDetailViewModel.createIntent(this, coordinates))
       } else {
         AlertDialog.Builder(this)
-            .setMessage("Can't find location")
-            .setPositiveButton("Ok", null)
+            .setMessage(R.string.cant_find_given_location)
+            .setPositiveButton(R.string.ok, null)
             .show()
       }
     })

@@ -1,15 +1,13 @@
-package com.raywenderlich.android.rwandroidtutorial
+package com.raywenderlich.android.rwandroidtutorial.ui.locationdetail
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.data.SunSchedule
+import com.raywenderlich.android.rwandroidtutorial.data.LocationSunTimetable
 import com.raywenderlich.android.rwandroidtutorial.repository.SunriseSunsetRepository
 
 class LocationDetailViewModel(app: Application) : AndroidViewModel(app) {
@@ -27,7 +25,7 @@ class LocationDetailViewModel(app: Application) : AndroidViewModel(app) {
 
   private val repository = SunriseSunsetRepository(app)
 
-  val locationSunTimetable = MediatorLiveData<SunSchedule?>()
+  val locationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
 
   fun load(params: Bundle?) {
     val coordinates = params?.get(COORDINATES_ARGUMENT) as? Coordinates
