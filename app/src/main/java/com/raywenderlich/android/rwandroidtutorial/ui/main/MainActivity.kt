@@ -45,6 +45,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.formatTimeString
+import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
 import com.raywenderlich.android.rwandroidtutorial.ui.locationdetail.LocationDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -84,6 +85,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         else -> false
       }
     }
+
+    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
 
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {

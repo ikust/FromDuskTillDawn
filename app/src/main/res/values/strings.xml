@@ -14,5 +14,6 @@
   <string name="sunrise_sunset_api">Sunrise Sunset API</string>
   <string name="noon_format">Solar noon: %1$s</string>
   <string name="day_length">Day length: %1$s</string>
+  <string name="sunrise_sunset_page">https://sunrise-sunset.org/</string>
 
 </resources>

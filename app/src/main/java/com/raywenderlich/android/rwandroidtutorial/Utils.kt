@@ -31,12 +31,17 @@
 package com.raywenderlich.android.rwandroidtutorial
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.support.annotation.StringRes
 
 
-fun formatTimeString(context: Context, @StringRes format: Int, value: String?): String? {
+fun formatTimeString(context: Context, @StringRes format: Int, value: String?): String? = context.getString(
+    format, value ?: context.getString(R.string.no_data)
+)
 
-  return context.getString(
-      format, value ?: context.getString(R.string.no_data)
-  )
+fun openUrlInBrowser(context: Context, url: String) {
+  val i = Intent(Intent.ACTION_VIEW)
+  i.data = Uri.parse(url)
+  context.startActivity(i)
 }

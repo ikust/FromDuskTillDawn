@@ -37,6 +37,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.formatTimeString
+import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
 import kotlinx.android.synthetic.main.activity_location_detail.*
 
 class LocationDetailActivity : AppCompatActivity() {
@@ -48,6 +49,8 @@ class LocationDetailActivity : AppCompatActivity() {
     setContentView(R.layout.activity_location_detail)
 
     progressBar.visibility = View.VISIBLE
+
+    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
 
     viewModel = ViewModelProviders.of(this).get(LocationDetailViewModel::class.java)
 
