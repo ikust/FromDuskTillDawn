@@ -10,5 +10,6 @@
   <string name="cant_find_given_location">Can\'t find given location</string>
   <string name="ok">OK</string>
   <string name="city_name_hint">Type in city name</string>
+  <string name="note_all_times_are_in_utc">Note: All times are in UTC.</string>
 
 </resources>

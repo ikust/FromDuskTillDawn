@@ -60,12 +60,22 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:text="Sunset time: 9:00 PM" />
 
+  <TextView
+    android:id="@+id/tvNote"
+    style="?android:textAppearanceMedium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/tvSunset"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_small"
+    android:text="@string/note_all_times_are_in_utc" />
+
   <ProgressBar
     android:id="@+id/progressBar"
     android:visibility="gone"
     tools:visibility="visible"
     android:layout_alignTop="@+id/tvLocation"
-    android:layout_alignBottom="@+id/tvSunset"
+    android:layout_alignBottom="@+id/tvNote"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_width="wrap_content"
