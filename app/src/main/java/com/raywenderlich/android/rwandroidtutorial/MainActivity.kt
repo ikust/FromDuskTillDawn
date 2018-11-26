@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
   private lateinit var viewModel: MainViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.AppTheme)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
