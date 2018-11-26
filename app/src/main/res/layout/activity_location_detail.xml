@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:gravity="center"
-  tools:context=".ui.main.MainActivity">
+  tools:context=".ui.main.MainActivity"
+  android:background="#ffffff">
+
+  <ImageView
+    android:id="@+id/ivBackground"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentTop="true"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:src="@drawable/background" />
 
   <TextView
     android:id="@+id/tvLocation"
+    style="@style/TextAppearance.AppCompat.Headline"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@+id/ivBackground"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_large"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    style="@style/TextAppearance.AppCompat.Headline"/>
+    tools:text="New York" />
 
   <TextView
     android:id="@+id/tvSunrise"
+    style="?android:textAppearanceMedium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@+id/tvLocation"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_small"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Sunrise time: 8:00 AM" />
 
   <TextView
     android:id="@+id/tvSunset"
+    style="?android:textAppearanceMedium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@id/tvSunrise"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_small"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Sunset time: 9:00 PM" />
 
-</LinearLayout>
+</RelativeLayout>

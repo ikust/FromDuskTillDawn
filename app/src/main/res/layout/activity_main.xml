@@ -1,53 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:gravity="center"
+  android:background="#ffffff"
   tools:context=".ui.main.MainActivity">
+
+  <ImageView
+    android:id="@+id/ivBackground"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:src="@drawable/background" />
 
   <EditText
     android:id="@+id/etSearch"
-    android:drawableEnd="@drawable/ic_search_black_24dp"
-    android:hint="@string/city_name_hint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@id/ivBackground"
+    android:layout_marginStart="@dimen/margin_medium"
+    android:layout_marginTop="@dimen/search_edit_text_top_padding"
+    android:layout_marginEnd="@dimen/margin_medium"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="@drawable/search_background"
+    android:drawableEnd="@drawable/ic_search_black_24dp"
+    android:hint="@string/city_name_hint"
     android:imeOptions="actionSearch"
     android:inputType="text"
     android:lines="1"
-    android:maxLines="1" />
+    android:maxLines="1"
+    android:padding="@dimen/edit_text_padding" />
 
   <TextView
     android:id="@+id/tvLocation"
+    style="@style/TextAppearance.AppCompat.Headline"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@+id/etSearch"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_medium"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    style="@style/TextAppearance.AppCompat.Headline"/>
+    tools:text="New York" />
 
   <TextView
     android:id="@+id/tvSunrise"
+    style="?android:textAppearanceMedium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@+id/tvLocation"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_small"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Sunrise time: 8:00 AM" />
 
   <TextView
     android:id="@+id/tvSunset"
+    style="?android:textAppearanceMedium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_below="@id/tvSunrise"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/margin_small"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Sunset time: 9:00 PM" />
 
-</LinearLayout>
+</RelativeLayout>
