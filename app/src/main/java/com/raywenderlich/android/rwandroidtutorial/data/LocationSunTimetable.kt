@@ -35,7 +35,5 @@ data class LocationSunTimetable(
     val sunrise: String?,
     val sunset: String?,
     val noon: String?,
-    val dayLength: String?,
-    val firstLight: String?,
-    val lastLight: String?
+    val dayLength: String?
 )
