@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
     viewModel.currentLocationSunTimetable.observe(this, Observer { sunTimetable ->
+      progressBar.visibility = View.GONE
+
       tvLocation.text = sunTimetable?.locationName ?: getString(R.string.couldnt_find_location)
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
@@ -83,6 +85,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
+      progressBar.visibility = View.VISIBLE
       viewModel.load()
     } else {
       // Show rationale and request permission.
@@ -95,6 +98,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
       if (permissions.size == 1 &&
           permissions[0] == Manifest.permission.ACCESS_COARSE_LOCATION &&
           grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        progressBar.visibility = View.VISIBLE
         viewModel.load()
       } else {
         tvLocation.text = getString(R.string.location_permission_denied)
