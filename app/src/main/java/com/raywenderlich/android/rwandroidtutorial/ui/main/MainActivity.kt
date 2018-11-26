@@ -34,7 +34,9 @@ import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -43,6 +45,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import com.google.android.gms.instantapps.InstantApps
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.formatTimeString
 import com.raywenderlich.android.rwandroidtutorial.ui.locationdetail.LocationDetailViewModel
@@ -50,6 +53,21 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
+
+  companion object {
+    private val REFERRER = "InstallApiActivity"
+    private val REQUEST_CODE = 7
+  }
+
+  /**
+   * Intent to launch after the app has been installed.
+   */
+  private val postInstallIntent = Intent(Intent.ACTION_VIEW,
+      Uri.parse("https://example.com/location")).addCategory(Intent.CATEGORY_BROWSABLE).putExtras(Bundle().apply {
+    putString("The key to", "sending data via intent")
+  })
+
+  private var askedToInstall = false
 
   private lateinit var viewModel: MainViewModel
 
@@ -107,16 +125,25 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
   }
 
   private fun searchForLocation(locationName: String) {
-    viewModel.searchFor(locationName).observe(this, Observer { coordinates ->
-      if (coordinates != null) {
-        startActivity(LocationDetailViewModel.createIntent(this, coordinates))
-      } else {
-        AlertDialog.Builder(this)
-            .setMessage(R.string.cant_find_given_location)
-            .setPositiveButton(R.string.ok, null)
-            .show()
-      }
-    })
+    if (!askedToInstall) {
+      askedToInstall = true
+
+      InstantApps.showInstallPrompt(this,
+          postInstallIntent,
+          REQUEST_CODE,
+          REFERRER)
+    } else {
+      viewModel.searchFor(locationName).observe(this, Observer { coordinates ->
+        if (coordinates != null) {
+          startActivity(LocationDetailViewModel.createIntent(this, coordinates))
+        } else {
+          AlertDialog.Builder(this)
+              .setMessage(R.string.cant_find_given_location)
+              .setPositiveButton(R.string.ok, null)
+              .show()
+        }
+      })
+    }
   }
 
   private fun hideKeyboard(view: View) {
