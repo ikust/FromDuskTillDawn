@@ -30,11 +30,10 @@
 
 package com.raywenderlich.android.rwandroidtutorial.data
 
-import java.util.*
-
 data class LocationSunTimetable(
     val locationName: String,
     val sunrise: String?,
     val sunset: String?,
-    val locale: Locale?
+    val noon: String?,
+    val dayLength: String?
 )

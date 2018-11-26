@@ -35,8 +35,10 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.google.android.gms.instantapps.InstantApps
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.formatTimeString
+import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
 import kotlinx.android.synthetic.main.activity_location_detail.*
 
 class LocationDetailActivity : AppCompatActivity() {
@@ -49,6 +51,8 @@ class LocationDetailActivity : AppCompatActivity() {
 
     progressBar.visibility = View.VISIBLE
 
+    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
+
     viewModel = ViewModelProviders.of(this).get(LocationDetailViewModel::class.java)
 
     viewModel.locationSunTimetable.observe(this, Observer { sunTimetable ->
@@ -57,6 +61,11 @@ class LocationDetailActivity : AppCompatActivity() {
       tvLocation.text = sunTimetable?.locationName
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
+
+      if(!InstantApps.getPackageManagerCompat(this).isInstantApp) {
+        tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+        tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
+      }
     })
 
     viewModel.load(intent.extras)

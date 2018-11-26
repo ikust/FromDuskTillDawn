@@ -11,5 +11,9 @@
   <string name="ok">OK</string>
   <string name="city_name_hint">Type in city name</string>
   <string name="note_all_times_are_in_utc">Note: All times are in UTC.</string>
+  <string name="sunrise_sunset_api">Sunrise Sunset API</string>
+  <string name="noon_format">Solar noon: %1$s</string>
+  <string name="day_length">Day length: %1$s</string>
+  <string name="sunrise_sunset_page">https://sunrise-sunset.org/</string>
 
 </resources>

@@ -126,7 +126,8 @@ class SunriseSunsetRepository(val app: Application) {
               locationName,
               response.body()?.result?.sunrise,
               response.body()?.result?.sunset,
-              locale
+              response.body()?.result?.solarNoon,
+              response.body()?.result?.dayLength
           )
         } else {
           // Show error

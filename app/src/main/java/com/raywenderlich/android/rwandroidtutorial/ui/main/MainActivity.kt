@@ -48,6 +48,7 @@ import android.view.inputmethod.InputMethodManager
 import com.google.android.gms.instantapps.InstantApps
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.formatTimeString
+import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
 import com.raywenderlich.android.rwandroidtutorial.ui.locationdetail.LocationDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -84,6 +85,11 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
       tvLocation.text = sunTimetable?.locationName ?: getString(R.string.couldnt_find_location)
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
+
+      if(!InstantApps.getPackageManagerCompat(this).isInstantApp) {
+        tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+        tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
+      }
     })
 
     etSearch.setOnEditorActionListener { textView, actionId, _ ->
@@ -100,6 +106,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         else -> false
       }
     }
+
+    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
 
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
