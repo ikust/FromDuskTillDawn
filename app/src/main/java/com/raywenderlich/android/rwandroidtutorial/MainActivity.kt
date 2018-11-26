@@ -31,16 +31,22 @@
 package com.raywenderlich.android.rwandroidtutorial
 
 import android.Manifest
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
+import com.raywenderlich.android.rwandroidtutorial.repository.SunriseSunsetRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -51,26 +57,36 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
   private lateinit var viewModel: MainViewModel
 
-  private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
     viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    viewModel.currentLocationSunTimetable.observe(this, Observer {
+      tvLocation.text = it?.locationName ?: "Couldn't find your location"
+      tvSunrise.text = it?.sunrise
+      tvSunset.text = it?.sunset
+    })
+
+    etSearch.setOnEditorActionListener { textView, actionId, _ ->
+      when (actionId) {
+        EditorInfo.IME_ACTION_SEARCH -> {
+          hideKeyboard(textView)
+          searchForLocation(textView.text.toString())
+          true
+        }
+        EditorInfo.IME_ACTION_DONE -> {
+          searchForLocation(textView.text.toString())
+          true
+        }
+        else -> false
+      }
+    }
 
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
-
-      viewModel.load(intent.extras)
-      viewModel.sunriseData.observe(this, Observer {
-        tvLocation.text = it?.locationName ?: "Couldn't find your location"
-        tvSunrise.text = it?.sunrise
-        tvSunset.text = it?.sunset
-      })
+      viewModel.load()
     } else {
       // Show rationale and request permission.
       ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 0)
@@ -82,11 +98,28 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
       if (permissions.size == 1 &&
           permissions[0] == Manifest.permission.ACCESS_COARSE_LOCATION &&
           grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        viewModel.load(intent.extras)
+        viewModel.load()
       } else {
         // Permission was denied. Display an error message.
       }
-
     }
+  }
+
+  private fun searchForLocation(locationName: String) {
+    viewModel.searchFor(locationName).observe(this, Observer { coordinates ->
+      if (coordinates != null) {
+        startActivity(LocationDetailViewModel.createIntent(this, coordinates))
+      } else {
+        AlertDialog.Builder(this)
+            .setMessage("Can't find location")
+            .setPositiveButton("Ok", null)
+            .show()
+      }
+    })
+  }
+
+  private fun hideKeyboard(view: View) {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
   }
 }

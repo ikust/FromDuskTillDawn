@@ -1,4 +1,8 @@
 package com.raywenderlich.android.rwandroidtutorial.data
 
-class Coordinates {
-}
+import java.io.Serializable
+
+data class Coordinates(
+    val latitude: Double,
+    val longitude: Double
+) : Serializable

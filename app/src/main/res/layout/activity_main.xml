@@ -8,6 +8,17 @@
   android:gravity="center"
   tools:context=".MainActivity">
 
+  <EditText
+    android:id="@+id/etSearch"
+    android:drawableRight="@drawable/ic_search_black_24dp"
+    android:hint="Type in city name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:imeOptions="actionSearch"
+    android:inputType="text"
+    android:lines="1"
+    android:maxLines="1" />
+
   <TextView
     android:id="@+id/tvLocation"
     android:layout_width="wrap_content"
