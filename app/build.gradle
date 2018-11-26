@@ -20,6 +20,16 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+
+  flavorDimensions "experience"
+  productFlavors {
+    instant {
+      versionCode 1
+    }
+    installed {
+      versionCode 2
+    }
+  }
 }
 
 dependencies {
@@ -40,4 +50,79 @@ dependencies {
   implementation "com.squareup.retrofit2:retrofit:2.5.0"
   implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
+}
+
+
+project.afterEvaluate {
+  ext.getSigningConfig = { variant ->
+    return variant.signingConfig ?: variant.buildType.signingConfig
+  }
+
+  Properties properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  def bundletool = properties.getProperty('bundletool')
+
+  android.applicationVariants.all { variant ->
+    task "assembleSplits${variant.name.capitalize()}"(type: Exec, dependsOn: "bundle", group: "build") {
+      workingDir project.rootDir
+      commandLine = ["java", "-jar", bundletool, "build-apks", "--bundle=${project.buildDir}/outputs/bundle/${variant.name}/app.aab",
+                     "--output=${project.buildDir}/outputs/splits/${variant.name}/app.apks",
+                     "--connected-device",
+                     "--ks=${getSigningConfig()?.storeFile}",
+                     "--ks-pass=pass:${getSigningConfig()?.storePassword}",
+                     "--ks-key-alias=${getSigningConfig()?.keyAlias}",
+                     "--key-pass=pass:${getSigningConfig()?.keyPassword}",
+                     "--adb=${android.getAdbExe()}"
+      ]
+      doFirst {
+        mkdir "${project.buildDir}/outputs/splits/${variant.name}"
+        println "Running bundletool:\n${commandLine.join(" ")}"
+      }
+      doFirst {
+        delete "${project.buildDir}/outputs/splits/${variant.name}"
+      }
+      doLast {
+        println "Creating splits for ${variant.name}"
+      }
+    }
+  }
+
+  android.applicationVariants.all { variant ->
+    task "runinstant${variant.name.capitalize()}"(type: ExecInstantApp, dependsOn: "assembleSplits${variant.name.capitalize()}", group: "build") {
+      workingDir project.rootDir
+      androidSdkPath = android.sdkDirectory.path
+      apksPath = "${project.buildDir}/outputs/splits/${variant.name}/app.apks"
+    }
+  }
+}
+
+import org.gradle.api.tasks.options.Option
+
+class ExecInstantApp extends Exec {
+
+  @Input
+  @Option(option = "androidSdk", description = "Android SDK path")
+  String androidSdkPath
+
+  @Input
+  @Option(option = "apksPath", description="App apk splits path")
+  String apksPath
+
+  @Input
+  @Optional
+  @Option(option = "url", description = "Url to launch Instant App")
+  String url
+
+  @Override
+  protected void exec() {
+    if(url != null) {
+      commandLine = ["${androidSdkPath}/extras/google/instantapps/ia", "--debug", "run", apksPath, "-u", url]
+    } else {
+      commandLine = ["${androidSdkPath}/extras/google/instantapps/ia", "--debug", "run", apksPath]
+    }
+
+    println "Running ia:\n${commandLine.join(" ")}"
+
+    super.exec()
+  }
 }
