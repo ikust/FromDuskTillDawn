@@ -28,20 +28,11 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial
+package com.raywenderlich.android.fromdusktilldawn.data
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.support.annotation.StringRes
+import java.io.Serializable
 
-
-fun formatTimeString(context: Context, @StringRes format: Int, value: String?): String? = context.getString(
-    format, value ?: context.getString(R.string.no_data)
-)
-
-fun openUrlInBrowser(context: Context, url: String) {
-  val i = Intent(Intent.ACTION_VIEW)
-  i.data = Uri.parse(url)
-  context.startActivity(i)
-}
+data class Coordinates(
+    val latitude: Double,
+    val longitude: Double
+) : Serializable

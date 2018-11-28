@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.data
+package com.raywenderlich.android.fromdusktilldawn.data
 
 data class LocationSunTimetable(
     val locationName: String,

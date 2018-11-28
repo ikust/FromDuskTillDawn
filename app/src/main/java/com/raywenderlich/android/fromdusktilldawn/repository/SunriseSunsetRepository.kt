@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.repository
+package com.raywenderlich.android.fromdusktilldawn.repository
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -39,10 +39,10 @@ import android.location.Geocoder
 import android.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.raywenderlich.android.rwandroidtutorial.api.SunriseSunsetApi
-import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.data.LocationSunTimetable
-import com.raywenderlich.android.rwandroidtutorial.data.SunriseSunsetResponse
+import com.raywenderlich.android.fromdusktilldawn.api.SunriseSunsetApi
+import com.raywenderlich.android.fromdusktilldawn.data.Coordinates
+import com.raywenderlich.android.fromdusktilldawn.data.LocationSunTimetable
+import com.raywenderlich.android.fromdusktilldawn.data.SunriseSunsetResponse
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Call

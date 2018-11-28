@@ -28,9 +28,9 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.api
+package com.raywenderlich.android.fromdusktilldawn.api
 
-import com.raywenderlich.android.rwandroidtutorial.data.SunriseSunsetResponse
+import com.raywenderlich.android.fromdusktilldawn.data.SunriseSunsetResponse
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Call

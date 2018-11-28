@@ -28,29 +28,13 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.ui.main
+package com.raywenderlich.android.fromdusktilldawn.data
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.data.LocationSunTimetable
-import com.raywenderlich.android.rwandroidtutorial.repository.SunriseSunsetRepository
+import com.google.gson.annotations.SerializedName
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
-
-  private val repository = SunriseSunsetRepository(app)
-
-  val currentLocationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
-
-  fun load() {
-    currentLocationSunTimetable.addSource(repository.getSunriseSunset()) { value ->
-      currentLocationSunTimetable.value = value
-    }
-  }
-
-  fun searchFor(locationName: String): LiveData<Coordinates?> {
-    return repository.getCoordinates(locationName)
-  }
-}
+data class LocationSunriseSunset(
+    @SerializedName("sunrise") val sunrise: String,
+    @SerializedName("sunset") val sunset: String,
+    @SerializedName("solar_noon") val solarNoon: String,
+    @SerializedName("day_length") val dayLength: String
+)

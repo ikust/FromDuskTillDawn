@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.ui.locationdetail
+package com.raywenderlich.android.fromdusktilldawn.ui.locationdetail
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -36,9 +36,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.android.gms.instantapps.InstantApps
-import com.raywenderlich.android.rwandroidtutorial.R
-import com.raywenderlich.android.rwandroidtutorial.formatTimeString
-import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
+import com.raywenderlich.android.fromdusktilldawn.R
+import com.raywenderlich.android.fromdusktilldawn.formatTimeString
+import com.raywenderlich.android.fromdusktilldawn.openUrlInBrowser
 import kotlinx.android.synthetic.main.activity_location_detail.*
 
 class LocationDetailActivity : AppCompatActivity() {

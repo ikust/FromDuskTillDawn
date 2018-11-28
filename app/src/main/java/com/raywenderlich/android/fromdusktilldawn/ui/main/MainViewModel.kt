@@ -28,11 +28,29 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.data
+package com.raywenderlich.android.fromdusktilldawn.ui.main
 
-import java.io.Serializable
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MediatorLiveData
+import com.raywenderlich.android.fromdusktilldawn.data.Coordinates
+import com.raywenderlich.android.fromdusktilldawn.data.LocationSunTimetable
+import com.raywenderlich.android.fromdusktilldawn.repository.SunriseSunsetRepository
 
-data class Coordinates(
-    val latitude: Double,
-    val longitude: Double
-) : Serializable
+class MainViewModel(app: Application) : AndroidViewModel(app) {
+
+  private val repository = SunriseSunsetRepository(app)
+
+  val currentLocationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
+
+  fun load() {
+    currentLocationSunTimetable.addSource(repository.getSunriseSunset()) { value ->
+      currentLocationSunTimetable.value = value
+    }
+  }
+
+  fun searchFor(locationName: String): LiveData<Coordinates?> {
+    return repository.getCoordinates(locationName)
+  }
+}
