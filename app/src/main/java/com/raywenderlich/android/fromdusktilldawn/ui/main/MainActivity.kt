@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.ui.main
+package com.raywenderlich.android.fromdusktilldawn.ui.main
 
 import android.Manifest
 import android.arch.lifecycle.Observer
@@ -43,10 +43,10 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import com.raywenderlich.android.rwandroidtutorial.R
-import com.raywenderlich.android.rwandroidtutorial.formatTimeString
-import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
-import com.raywenderlich.android.rwandroidtutorial.ui.locationdetail.LocationDetailViewModel
+import com.raywenderlich.android.fromdusktilldawn.R
+import com.raywenderlich.android.fromdusktilldawn.formatTimeString
+import com.raywenderlich.android.fromdusktilldawn.openUrlInBrowser
+import com.raywenderlich.android.fromdusktilldawn.ui.locationdetail.LocationDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 

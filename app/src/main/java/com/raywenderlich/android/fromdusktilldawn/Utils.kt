@@ -28,13 +28,20 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.data
+package com.raywenderlich.android.fromdusktilldawn
 
-import com.google.gson.annotations.SerializedName
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.support.annotation.StringRes
 
-data class LocationSunriseSunset(
-    @SerializedName("sunrise") val sunrise: String,
-    @SerializedName("sunset") val sunset: String,
-    @SerializedName("solar_noon") val solarNoon: String,
-    @SerializedName("day_length") val dayLength: String
+
+fun formatTimeString(context: Context, @StringRes format: Int, value: String?): String? = context.getString(
+    format, value ?: context.getString(R.string.no_data)
 )
+
+fun openUrlInBrowser(context: Context, url: String) {
+  val i = Intent(Intent.ACTION_VIEW)
+  i.data = Uri.parse(url)
+  context.startActivity(i)
+}

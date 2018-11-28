@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.raywenderlich.android.rwandroidtutorial">
+  package="com.raywenderlich.android.fromdusktilldawn">
 
   <uses-permission android:name="android.permission.INTERNET" />
 
@@ -43,7 +43,7 @@ THE SOFTWARE.
     android:theme="@style/AppTheme">
 
     <activity
-      android:name=".ui.main.MainActivity"
+      android:name="com.raywenderlich.android.fromdusktilldawn.ui.main.MainActivity"
       android:theme="@style/AppTheme.Splash">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@ THE SOFTWARE.
       </intent-filter>
     </activity>
 
-    <activity android:name=".ui.locationdetail.LocationDetailActivity" />
+    <activity android:name="com.raywenderlich.android.fromdusktilldawn.ui.locationdetail.LocationDetailActivity" />
   </application>
 
 </manifest>

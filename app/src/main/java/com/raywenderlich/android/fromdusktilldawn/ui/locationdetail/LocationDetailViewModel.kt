@@ -28,20 +28,45 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial
+package com.raywenderlich.android.fromdusktilldawn.ui.locationdetail
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MediatorLiveData
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.support.annotation.StringRes
+import android.os.Bundle
+import com.raywenderlich.android.fromdusktilldawn.data.Coordinates
+import com.raywenderlich.android.fromdusktilldawn.data.LocationSunTimetable
+import com.raywenderlich.android.fromdusktilldawn.repository.SunriseSunsetRepository
 
+class LocationDetailViewModel(app: Application) : AndroidViewModel(app) {
 
-fun formatTimeString(context: Context, @StringRes format: Int, value: String?): String? = context.getString(
-    format, value ?: context.getString(R.string.no_data)
-)
+  companion object {
+    private const val COORDINATES_ARGUMENT = "coordinates"
 
-fun openUrlInBrowser(context: Context, url: String) {
-  val i = Intent(Intent.ACTION_VIEW)
-  i.data = Uri.parse(url)
-  context.startActivity(i)
+    fun createIntent(context: Context, work: Coordinates): Intent {
+      val intent = Intent(context, LocationDetailActivity::class.java)
+      intent.putExtra(COORDINATES_ARGUMENT, work)
+
+      return intent
+    }
+  }
+
+  private val repository = SunriseSunsetRepository(app)
+
+  val locationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
+
+  fun load(params: Bundle?) {
+    val coordinates = params?.get(COORDINATES_ARGUMENT) as? Coordinates
+
+    if(coordinates != null) {
+      locationSunTimetable.addSource(repository.getSunriseSunset(
+          coordinates.latitude,
+          coordinates.longitude
+      )) { value -> locationSunTimetable.value = value }
+    } else {
+      locationSunTimetable.value = null
+    }
+  }
 }

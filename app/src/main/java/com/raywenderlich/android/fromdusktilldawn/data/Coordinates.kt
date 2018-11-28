@@ -28,43 +28,11 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.ui.locationdetail
+package com.raywenderlich.android.fromdusktilldawn.data
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.View
-import com.raywenderlich.android.rwandroidtutorial.R
-import com.raywenderlich.android.rwandroidtutorial.formatTimeString
-import com.raywenderlich.android.rwandroidtutorial.openUrlInBrowser
-import kotlinx.android.synthetic.main.activity_location_detail.*
+import java.io.Serializable
 
-class LocationDetailActivity : AppCompatActivity() {
-
-  private lateinit var viewModel: LocationDetailViewModel
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_location_detail)
-
-    progressBar.visibility = View.VISIBLE
-
-    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
-
-    viewModel = ViewModelProviders.of(this).get(LocationDetailViewModel::class.java)
-
-    viewModel.locationSunTimetable.observe(this, Observer { sunTimetable ->
-      progressBar.visibility = View.GONE
-
-      tvLocation.text = sunTimetable?.locationName
-      tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
-      tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
-      tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
-      tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
-    })
-
-    viewModel.load(intent.extras)
-  }
-
-}
+data class Coordinates(
+    val latitude: Double,
+    val longitude: Double
+) : Serializable

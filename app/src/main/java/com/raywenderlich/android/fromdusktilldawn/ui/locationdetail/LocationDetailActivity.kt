@@ -28,29 +28,43 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.ui.main
+package com.raywenderlich.android.fromdusktilldawn.ui.locationdetail
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import com.raywenderlich.android.rwandroidtutorial.data.Coordinates
-import com.raywenderlich.android.rwandroidtutorial.data.LocationSunTimetable
-import com.raywenderlich.android.rwandroidtutorial.repository.SunriseSunsetRepository
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.raywenderlich.android.fromdusktilldawn.R
+import com.raywenderlich.android.fromdusktilldawn.formatTimeString
+import com.raywenderlich.android.fromdusktilldawn.openUrlInBrowser
+import kotlinx.android.synthetic.main.activity_location_detail.*
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class LocationDetailActivity : AppCompatActivity() {
 
-  private val repository = SunriseSunsetRepository(app)
+  private lateinit var viewModel: LocationDetailViewModel
 
-  val currentLocationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_location_detail)
 
-  fun load() {
-    currentLocationSunTimetable.addSource(repository.getSunriseSunset()) { value ->
-      currentLocationSunTimetable.value = value
-    }
+    progressBar.visibility = View.VISIBLE
+
+    tvSunriseSunsetApi.setOnClickListener { openUrlInBrowser(this, getString(R.string.sunrise_sunset_page)) }
+
+    viewModel = ViewModelProviders.of(this).get(LocationDetailViewModel::class.java)
+
+    viewModel.locationSunTimetable.observe(this, Observer { sunTimetable ->
+      progressBar.visibility = View.GONE
+
+      tvLocation.text = sunTimetable?.locationName
+      tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
+      tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
+      tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+      tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
+    })
+
+    viewModel.load(intent.extras)
   }
 
-  fun searchFor(locationName: String): LiveData<Coordinates?> {
-    return repository.getCoordinates(locationName)
-  }
 }

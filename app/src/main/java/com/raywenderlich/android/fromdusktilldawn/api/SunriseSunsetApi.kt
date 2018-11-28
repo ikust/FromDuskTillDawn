@@ -28,11 +28,39 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.rwandroidtutorial.data
+package com.raywenderlich.android.fromdusktilldawn.api
 
-import java.io.Serializable
+import com.raywenderlich.android.fromdusktilldawn.data.SunriseSunsetResponse
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-data class Coordinates(
-    val latitude: Double,
-    val longitude: Double
-) : Serializable
+interface SunriseSunsetApi {
+
+  @GET("json?date=today")
+  fun getSunriseAndSunset(
+      @Query("lat") latitude: Double,
+      @Query("lng") longitude: Double
+  ): Call<SunriseSunsetResponse>
+
+  companion object {
+    private const val BASE_URL = "https://api.sunrise-sunset.org/"
+
+    fun create(): SunriseSunsetApi = create(HttpUrl.parse(BASE_URL)!!)
+
+    private fun create(httpUrl: HttpUrl): SunriseSunsetApi {
+      val client = OkHttpClient.Builder()
+          .build()
+      return Retrofit.Builder()
+          .baseUrl(httpUrl)
+          .client(client)
+          .addConverterFactory(GsonConverterFactory.create())
+          .build()
+          .create(SunriseSunsetApi::class.java)
+    }
+  }
+}
