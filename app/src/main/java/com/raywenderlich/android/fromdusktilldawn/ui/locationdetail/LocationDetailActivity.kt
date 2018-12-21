@@ -35,6 +35,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.google.android.gms.instantapps.InstantApps
 import com.raywenderlich.android.fromdusktilldawn.R
 import com.raywenderlich.android.fromdusktilldawn.formatTimeString
 import com.raywenderlich.android.fromdusktilldawn.openUrlInBrowser
@@ -60,11 +61,13 @@ class LocationDetailActivity : AppCompatActivity() {
       tvLocation.text = sunTimetable?.locationName
       tvSunrise.text = formatTimeString(this, R.string.sunrise_format, sunTimetable?.sunrise)
       tvSunset.text = formatTimeString(this, R.string.sunset_format, sunTimetable?.sunset)
-      tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
-      tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
+      if(!InstantApps.getPackageManagerCompat(this).isInstantApp) {
+        tvNoon.text = formatTimeString(this, R.string.noon_format, sunTimetable?.noon)
+        tvDayLength.text = formatTimeString(this, R.string.day_length, sunTimetable?.dayLength)
+      }
     })
 
-    viewModel.load(intent.extras)
+    viewModel.load(intent)
   }
 
 }
