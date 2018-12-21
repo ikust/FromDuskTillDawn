@@ -57,8 +57,15 @@ class LocationDetailViewModel(app: Application) : AndroidViewModel(app) {
 
   val locationSunTimetable = MediatorLiveData<LocationSunTimetable?>()
 
-  fun load(params: Bundle?) {
-    val coordinates = params?.get(COORDINATES_ARGUMENT) as? Coordinates
+  fun load(intent: Intent) {
+    val coordinates = if(intent.data != null) {
+      Coordinates(
+          intent.data?.getQueryParameter("lat")?.toDouble() ?: 0.0,
+          intent.data?.getQueryParameter("lng")?.toDouble() ?: 0.0
+      )
+    } else {
+      intent.extras?.get(COORDINATES_ARGUMENT) as? Coordinates
+    }
 
     if(coordinates != null) {
       locationSunTimetable.addSource(repository.getSunriseSunset(

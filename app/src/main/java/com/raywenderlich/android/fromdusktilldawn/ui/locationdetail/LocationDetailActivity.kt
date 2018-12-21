@@ -68,7 +68,7 @@ class LocationDetailActivity : AppCompatActivity() {
       }
     })
 
-    viewModel.load(intent.extras)
+    viewModel.load(intent)
   }
 
 }
